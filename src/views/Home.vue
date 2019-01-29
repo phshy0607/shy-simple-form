@@ -1,28 +1,43 @@
 <template>
   <div class="home">
-    <shy-form :rules="rules" :model="form">
-      <shy-form-item label="姓名">
-        <shy-input v-model="form.name"/>
+    <shy-form
+      :rules="rules"
+      :model="form"
+    >
+      <shy-form-item
+        label="姓名"
+        prop="name"
+      >
+        <shy-input v-model="form.name" />
       </shy-form-item>
 
-      <shy-form-item label="年龄">
-        <shy-input type="number" v-model="form.age"/>
+      <shy-form-item
+        label="年龄"
+        prop="age"
+      >
+        <shy-input
+          type="number"
+          v-model="form.age"
+        />
       </shy-form-item>
 
-      <shy-form-item label="email">
-        <shy-input v-model="form.email"/>
+      <shy-form-item
+        label="email"
+        prop="email"
+      >
+        <shy-input v-model="form.email" />
       </shy-form-item>
     </shy-form>
   </div>
 </template>
 
 <script>
-import ShyForm from '@/components/ShyForm.vue'
-import ShyFormItem from '@/components/ShyFormItem.vue'
-import ShyInput from '@/components/ShyInput.vue'
+import ShyForm from '@/components/form/ShyForm.vue'
+import ShyFormItem from '@/components/form/ShyFormItem.vue'
+import ShyInput from '@/components/form/ShyInput.vue'
 
 export default {
-  name: 'home',
+  name: 'Home',
   components: {
     ShyForm,
     ShyFormItem,

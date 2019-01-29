@@ -5,7 +5,8 @@
   "scripts": {
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
-    "lint": "vue-cli-service lint"
+    "lint": "vue-cli-service lint",
+    "lint1": "eslint src/**/*.vue --fix"
   },
   "dependencies": {
     "async-validator": "^1.10.1",
@@ -30,10 +31,18 @@
       "node": true
     },
     "extends": [
-      "plugin:vue/essential",
+      "plugin:vue/strongly-recommended",
       "@vue/standard"
     ],
-    "rules": {},
+    "rules": {
+      "vue/max-attributes-per-line": ["error", {
+        "singleline": 1,
+        "multiline": {
+          "max": 1,
+          "allowFirstLine": false
+        }
+      }]
+    },
     "parserOptions": {
       "parser": "babel-eslint"
     }
