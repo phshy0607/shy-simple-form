@@ -1,11 +1,17 @@
 <template>
   <div>
-    <label v-if="label">
+    <label
+      v-if="label"
+      :class="{'shy-form-item-is-invalid': invalid }"
+    >
       {{ label }}
     </label>
     <div>
       <slot />
     </div>
+    <span v-if="invalid">
+      {{ this.validateMessage[0].message }}
+    </span>
   </div>
 </template>
 
@@ -33,6 +39,14 @@ export default {
       validateMessage: ''
     }
   },
+  computed: {
+    fieldValue () {
+      return this.form.model[this.prop]
+    },
+    invalid () {
+      return this.validateState === 'error'
+    }
+  },
   methods: {
     setListeners () {
       this.$on('on-shy-form-blur', function (value) {
@@ -43,21 +57,39 @@ export default {
       })
     },
     getRules () {
-
+      const rules = this.form.rules || {}
+      return [].concat(rules[this.prop] || [])
     },
-    validate (trigger) {
-      // let descriptor = {
-      //   [this.prop]: 
-      // }
+    getFilteredRules (trigger) {
+      const rules = this.getRules()
+      return rules.filter((rule) => rule.trigger && rule.trigger.indexOf(trigger) !== -1)
+    },
+    validate (trigger, callback = function () {}) {
+      let rules = this.getFilteredRules(trigger)
 
-      // let validator = new Schema(rule)
-      // validator.validate(value, (errors, fields) => {
-      //   if (errors) {
-      //     console.error(errors)
-      //   } else {
-      //     console.log(fields)
-      //   }
-      // })
+      if (!rules || rules.length === 0) {
+        return true
+      }
+
+      let descriptor = {
+        [this.prop]: rules
+      }
+      let model = {
+        [this.prop]: this.fieldValue
+      }
+
+      let validator = new Schema(descriptor)
+      validator.validate(model, (errors) => {
+        if (errors) {
+          this.validateState = 'error'
+          this.validateMessage = errors
+          callback(errors)
+        } else {
+          this.validateState = 'success'
+          this.validateMessage = ''
+          callback()
+        }
+      })
     }
   },
   created () {
@@ -67,11 +99,15 @@ export default {
     }
   },
   beforeDestroy () {
-    this.dispatch('ShyForm', 'on-shy-form-item-remove', this.prop)
+    if (this.prop) {
+      this.dispatch('ShyForm', 'on-shy-form-item-remove', this.prop)
+    }
   }
 }
 </script>
 
-<style>
-
+<style scoped>
+  .shy-form-item-is-invalid {
+    color: red
+  }
 </style>

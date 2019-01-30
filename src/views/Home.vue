@@ -17,7 +17,7 @@
       >
         <shy-input
           type="number"
-          v-model="form.age"
+          v-model.number="form.age"
         />
       </shy-form-item>
 
@@ -53,8 +53,8 @@ export default {
       rules: {
         name: [{ required: true, message: '请输入姓名', trigger: 'blur' }],
         age: [
-          { required: true, message: '请输入年龄', trigger: 'blur' },
-          { type: 'number', message: '请输入数字', trigger: 'blur' }
+          { required: true, message: '活动名称不能为空', trigger: 'blur' },
+          { type: 'number', message: '活动名称必须是数字', trigger: 'blur' }
         ],
         email: [{ type: 'email', message: '请输入正确的邮箱', trigger: 'blur' }]
       }
